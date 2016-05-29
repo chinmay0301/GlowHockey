@@ -20,4 +20,5 @@ Official openCV documentation.
 5) https://github.com/Arunabh98/AirHockey
   A friends repository, who has made a ping pong game in pygame, I improved his game also by contributing to it. Removed a few bugs, and used it as a reference for our Air Hockey Game.
 
-6) 
+6) http://www.pygame.org/docs/ref/draw.html 
+   Official Pygame documentation for information of all the functions required.
