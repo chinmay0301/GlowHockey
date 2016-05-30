@@ -14,12 +14,8 @@ while(True):
 
     im = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
     im = (255-im)
-    params = cv2.SimpleBlobDetector_Params()
 
-    params.filterByArea = True
-    params.minArea = 100
-   
-    detector = cv2.SimpleBlobDetector(params)
+    detector = cv2.SimpleBlobDetector()
 
     keypoints = detector.detect(im)
 
@@ -31,11 +27,6 @@ while(True):
 
     #cv2.imshow("image", np.hstack([img,output]))
     #cv2.waitKey(0)
-    if len(keypoints)>0:
-     print "x:"
-     print keypoints[0].pt[0]
-     print "y:"
-     print keypoints[0].pt[1]
 
 cap.release()
 cv2.destroyAllWindows()
