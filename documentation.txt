@@ -22,3 +22,8 @@ Official openCV documentation.
 
 6) http://www.pygame.org/docs/ref/draw.html 
    Official Pygame documentation for information of all the functions required.
+ 
+7) http://www.pygame.org/docs/ref/time.html
+   pygame time commands
+   
+ 8) 
