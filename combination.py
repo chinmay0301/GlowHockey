@@ -55,6 +55,7 @@ while(1):
  
 
  cv2.imshow('frame',frame)
+ 
  #cv2.imshow('mask',mask)
  #cv2.imshow('img',img)
  if len(keypoints)>0:
