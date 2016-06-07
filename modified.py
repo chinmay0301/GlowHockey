@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from sys import exit
+from math import * 
 import random
 
 pygame.init()
@@ -17,7 +18,7 @@ goal = pygame.Surface((5,100))
 mallet1 = pygame.Surface((30,30))
 circ1= pygame.draw.circle(mallet1,(0,255,0),(15,15),15)   #add
 mallet2 = pygame.Surface((30,30))
-circ2= pygame.draw.circle(mallet2,(255,0,0),(15,15),15)
+circ2= pygame.draw.circle(mallet2,(0,0,255),(15,15),15)
 bar1 = mallet1.convert()
 bar1.set_colorkey((0,0,0))
 bar2 = mallet2.convert()
@@ -27,7 +28,7 @@ goal2 = goal.convert()
 goal1.fill((0,255,0))
 goal2.fill((0,255,0))
 circ_sur = pygame.Surface((30,30))
-circ = pygame.draw.circle(circ_sur,(0,255,0),(30/2,30/2),30/2)
+circ = pygame.draw.circle(circ_sur,(255,255,255),(30/2,30/2),30/2)
 circle = circ_sur.convert()
 circle.set_colorkey((0,0,0))
 # some definitions
@@ -38,7 +39,7 @@ goal1_x,goal2_x = 0. , 635.                      # leftmost point
 goal1_y,goal2_y = 190. , 190.                   #topmost point
 circle_x, circle_y = 305.,225.
 bar1_movex, bar1_movey, bar2_movey,bar2_movex = 0. , 0. , 0. , 0.
-speed_x, speed_y, speed_circ = 50., 50., 250.
+speed_x, speed_y, speed_circ = 250., 250., 250.
 bar1_score, bar2_score = 0,0
 #clock and font objects
 clock = pygame.time.Clock()
@@ -134,37 +135,35 @@ while True:
     elif bar2_y <= 5.: bar2_y = 5.
     if bar2_x >= 605. :bar2_x = 605.
     elif bar2_x <= 305. :bar2_x = 305.
-     
-    
-    if (circle_x <= bar1_x  and circle_x>=bar1_x-7.5): 
-     if(circle_y <= bar1_y + 57.5 and circle_y >= bar1_y -7.5):
-        speed_x = -speed_x
-        circle_x = bar1_x -7.5
-
-    if (circle_x <= bar1_x + 17.5 and circle_x>=bar1_x+10): 
-     if(circle_y <= bar1_y + 57.5 and circle_y >= bar1_y -7.5):
-        speed_x = -speed_x
-        circle_x = bar1_x + 17.5    
     
 
-    if (circle_x >= bar2_x -10 and circle_x <= bar2_x +10):
-     if (circle_y <= bar2_y + 42.5 and circle_y >= bar2_y -7.5):
-        speed_x = -speed_x
-        circle_x = bar2_x - 10
-        hit = 1  
-    
+    if (((circle_x-bar1_x)**2 + (circle_y - bar1_y)**2)<= 900):
+       m1= (circle_y-bar1_y)/(circle_x-bar1_x)
+       cosx= (1-m1**2)/(1+m1**2)
+       sinx=2*m1/(1+m1**2)
+       speed_x= (speed_circ-speed_x)*cosx + (speed_circ-speed_y)*sinx
+       speed_y= (speed_circ-speed_x)*sinx + (speed_circ-speed_y)*cosx
+    if (((circle_x-bar2_x)**2 + (circle_y - bar2_y)**2)<= 900):
+       m2= (circle_y-bar2_y)/(circle_x-bar2_x)
+       cosx= (1-m2**2)/(1+m2**2)
+       sinx=2*m2/(1+m2**2)
+       speed_x= (speed_circ-speed_x)*cosx + (speed_circ-speed_y)*sinx
+       speed_y= (speed_circ-speed_x)*sinx + (speed_circ-speed_y)*cosx
+  
 
     if circle_x <= 5.: 
      if circle_y<=290 and circle_y>=190:
         bar2_score += 1
         circle_x, circle_y = 305., 225.
         bar1_y,bar_2_y = 225., 225.
+        speed_x, speed_y, speed_circ = 250., 250., 250.
      elif not (circle_y<=260 and circle_y>=190) : speed_x = -speed_x
     elif circle_x >= 605:
       if circle_y<=290 and circle_y>=190:
         bar1_score += 1
         circle_x, circle_y = 305., 225.
         bar1_y, bar2_y = 225., 225.
+        speed_x, speed_y, speed_circ = 250., 250., 250.
       elif not (circle_y<=260 and circle_y>=190) : speed_x = -speed_x
     
     if circle_y <= 5.:
