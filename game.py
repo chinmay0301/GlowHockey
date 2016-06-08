@@ -58,6 +58,7 @@ while True:
         if event.type == QUIT:
             exit()
         if event.type == KEYDOWN:
+            speed_x = 250.
             keys = pygame.key.get_pressed()
             if keys[K_UP]:
                 bar1_movey = -ai_speed
@@ -78,6 +79,7 @@ while True:
                 bar2_movex = ai_speed
 
         elif event.type == KEYUP:
+            speed_x = 0
             if event.key == K_UP:
                 bar1_movey = 0.
             elif event.key == K_DOWN:
@@ -138,13 +140,23 @@ while True:
     
 
     if (((circle_x-bar1_x)**2 + (circle_y - bar1_y)**2)<= 900):
+       a = circle_x
+       b = circle_y
        m1= (circle_y-bar1_y)/(circle_x-bar1_x)
+       if(((circle_x-bar1_x)**2 + (circle_y - bar1_y)**2)<900):
+        circle_x = a
+        circle_y = b
        cosx= (1-m1**2)/(1+m1**2)
        sinx=2*m1/(1+m1**2)
        speed_x= (speed_circ-speed_x)*cosx + (speed_circ-speed_y)*sinx
        speed_y= (speed_circ-speed_x)*sinx + (speed_circ-speed_y)*cosx
     if (((circle_x-bar2_x)**2 + (circle_y - bar2_y)**2)<= 900):
+       a = circle_x
+       b = circle_y
        m2= (circle_y-bar2_y)/(circle_x-bar2_x)
+       if(((circle_x-bar2_x)**2 + (circle_y - bar2_y)**2)<900):
+        circle_x = a
+        circle_y = b
        cosx= (1-m2**2)/(1+m2**2)
        sinx=2*m2/(1+m2**2)
        speed_x= (speed_circ-speed_x)*cosx + (speed_circ-speed_y)*sinx
