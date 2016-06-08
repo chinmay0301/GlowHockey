@@ -39,7 +39,7 @@ goal1_x,goal2_x = 0. , 635.                      # leftmost point
 goal1_y,goal2_y = 190. , 190.                   #topmost point
 circle_x, circle_y = 305.,225.
 bar1_movex, bar1_movey, bar2_movey,bar2_movex = 0. , 0. , 0. , 0.
-speed_x, speed_y, speed_circ = 250., 250., 250.
+speed_x, speed_y, speed1_x, speed2_x, speed1_y, speed2_y ,speed_circ= 250., 250.,250.,250.,250.,250. ,250. 
 bar1_score, bar2_score = 0,0
 #clock and font objects
 clock = pygame.time.Clock()
@@ -61,39 +61,55 @@ while True:
             keys = pygame.key.get_pressed()
             if keys[K_UP]:
                 bar1_movey = -ai_speed
+                speed1_y=-speed1_y
             if keys[K_DOWN]:
                 bar1_movey = ai_speed
+                speed1_y=speed1_y
             if keys[K_LEFT]:
                 bar1_movex = -ai_speed
+                speed1_x=-speed1_x
             if keys[K_RIGHT]:
                 bar1_movex = ai_speed
+                speed1_x=speed1_x
             
             if keys[K_w]:
                 bar2_movey = -ai_speed
+                speed2_y=-speed2_y
             if keys[K_s]:
                 bar2_movey = ai_speed
+                speed2_y=speed2_y
             if keys[K_a]:
                 bar2_movex = -ai_speed
+                speed2_x=-speed2_x
             if keys[K_d]:
                 bar2_movex = ai_speed
+                speed2_x=speed2_x
 
         elif event.type == KEYUP:
             if event.key == K_UP:
                 bar1_movey = 0.
+                speed1_y=0.
             elif event.key == K_DOWN:
                 bar1_movey = 0.
+                speed1_y=0.
             elif event.key == K_LEFT:
                 bar1_movex = 0.
+                speed1_x=0.
             elif event.key == K_RIGHT:
                 bar1_movex = 0.
+                speed1_x=0.
             elif event.key == K_w:
                 bar2_movey = 0.
+                speed2_y=0.
             elif event.key == K_s:
                 bar2_movey = 0.
+                speed2_y=0.
             elif event.key == K_a:
                 bar2_movex = 0.
+                speed2_x=0.
             elif event.key == K_d:
                 bar2_movex = 0.
+                speed2_x=0.
  
    
     score1 = font.render(str(bar1_score), True,(255,255,255))
@@ -139,16 +155,16 @@ while True:
 
     if (((circle_x-bar1_x)**2 + (circle_y - bar1_y)**2)<= 900):
        m1= (circle_y-bar1_y)/(circle_x-bar1_x)
-       cosx= (1-m1**2)/(1+m1**2)
-       sinx=2*m1/(1+m1**2)
-       speed_x= (speed_circ-speed_x)*cosx + (speed_circ-speed_y)*sinx
-       speed_y= (speed_circ-speed_x)*sinx + (speed_circ-speed_y)*cosx
+       cos2x= (1-m1**2)/(1+m1**2)
+       sin2x=2*m1/(1+m1**2)
+       speed_x= speed1_x*(1/(1+m1*m1)) + speed1_y*(1/(1+m1*m1))*m1-speed_x*cos2x -speed_y*sin2x
+       speed_y= speed1_x*sin2x/2.0 + speed1_y*(1-((1/(1+m1*m1)) )) - speed_x*sin2x +speed_y*cos2x
     if (((circle_x-bar2_x)**2 + (circle_y - bar2_y)**2)<= 900):
        m2= (circle_y-bar2_y)/(circle_x-bar2_x)
-       cosx= (1-m2**2)/(1+m2**2)
-       sinx=2*m2/(1+m2**2)
-       speed_x= (speed_circ-speed_x)*cosx + (speed_circ-speed_y)*sinx
-       speed_y= (speed_circ-speed_x)*sinx + (speed_circ-speed_y)*cosx
+       cos2x= (1-m2**2)/(1+m2**2)
+       sin2x=2*m2/(1+m2**2)
+       speed_x= speed2_x*(1/(1+m1*m1)) + speed2_y*(1/(1+m1*m1))*m1-speed_x*cos2x -speed_y*sin2x
+       speed_y= speed2_x*sin2x/2.0 + speed2_y*(1-((1/(1+m1*m1)) )) - speed_x*sin2x +speed_y*cos2x
   
 
     if circle_x <= 5.: 

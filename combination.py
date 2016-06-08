@@ -15,8 +15,8 @@ def out():
 
     cap = cv2.VideoCapture(0)
     h=174
-    i=0
-    while(i==0):
+    
+    while True:
 	    # Take each frame
 	 _, frame = cap.read()
 	 frame = cv2.flip(frame,1)
@@ -53,11 +53,11 @@ def out():
 	 im_with_keypoints = cv2.drawKeypoints(img, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
 	 cv2.imshow("Keypoints", im_with_keypoints)
-	 
+	 print hsv
 
 	 cv2.imshow('frame',frame)
 	 ans = [0,0]
-	 i=10
+	 
 	 #cv2.imshow('mask',mask)
 	 #cv2.imshow('img',img)
 	 if len(keypoints)>0:
@@ -74,6 +74,6 @@ def out():
 
 
     
-    cv2.destroyAllWindows()
+    #cv2.destroyAllWindows()
     	  
 out()
