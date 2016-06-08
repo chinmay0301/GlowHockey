@@ -2,10 +2,22 @@ import pygame
 from pygame.locals import *
 from sys import exit
 import random
-from combination import out
+
 import cv2
 import numpy as np
+def rethsv(event,x,y,flags,param):
+        global h
+        if event == cv2.EVENT_LBUTTONDOWN:
+            #print hsv[y,x]
+            h=hsv[y,x,0]
 
+cv2.namedWindow('frame')
+cv2.setMouseCallback('frame', rethsv)  
+cv2.namedWindow('mask')  
+
+
+cap = cv2.VideoCapture(0)
+h=174
     
    
               
@@ -83,28 +95,16 @@ while True:
     screen.blit(score1,(250.,210.))
     screen.blit(score2,(380.,210.))
     #pygame.time.wait(500)
-    def rethsv(event,x,y,flags,param):
-        global h
-        if event == cv2.EVENT_LBUTTONDOWN:
-            #print hsv[y,x]
-            h=hsv[y,x,0]
-
-    cv2.namedWindow('frame')
-    cv2.setMouseCallback('frame', rethsv)  
-    cv2.namedWindow('mask')  
-
-
-    cap = cv2.VideoCapture(0)
-    h=174
+   
     i=0
     while(i==0):
         # Take each frame
      _, frame = cap.read()
      frame = cv2.flip(frame,1)
 
-     cv2.imshow('frame',frame)
-     
-     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+     #cv2.imshow('frame',frame)
+     #cv2.waitKey(0)
+     hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
      if h<20:
         l=0
         m=h+20
@@ -120,7 +120,7 @@ while True:
 
      
      res = cv2.bitwise_and(frame,frame, mask=mask)
-     img = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)
+     img = cv2.cvtColor(res, cv2.COLOR_RGB2GRAY)
      img = 255-img
      params = cv2.SimpleBlobDetector_Params()
 
@@ -178,7 +178,7 @@ while True:
     elif bar2_y <= 10.: bar2_y = 10.
     if bar2_x >= 620. :bar2_x = 620.
     elif bar2_x <= 340. :bar2_x = 340.
-     
+    
     
     if (circle_x <= bar1_x  and circle_x>=bar1_x-7.5): 
      if(circle_y <= bar1_y + 57.5 and circle_y >= bar1_y -7.5):
