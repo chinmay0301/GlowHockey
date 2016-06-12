@@ -1,8 +1,8 @@
 
 import cv2
 import numpy as np
-
-def rethsv(event,x,y,flags,param):
+import combination
+"""def rethsv(event,x,y,flags,param):
         global h
         if event == cv2.EVENT_LBUTTONDOWN:
             print hsv[y,x]
@@ -49,5 +49,7 @@ while(1):
 
 
 
-cv2.destroyAllWindows()
+cv2.destroyAllWindows()"""
+out()
+
 	 

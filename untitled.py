@@ -1,8 +1,27 @@
 import pygame
 from pygame.locals import *
 from sys import exit
-from math import * 
 import random
+
+import cv2
+import numpy as np
+def rethsv(event,x,y,flags,param):
+        global h
+        if event == cv2.EVENT_LBUTTONDOWN:
+            print hsv[y,x]
+            h=hsv[y,x,0]
+
+cv2.namedWindow('frame')
+cv2.setMouseCallback('frame', rethsv)  
+cv2.namedWindow('mask')  
+
+
+cap = cv2.VideoCapture(0)
+h=174
+    
+   
+              
+
 
 pygame.init()
 # length= input (" Enter the length of screen:  ")   add length
@@ -39,7 +58,7 @@ goal1_x,goal2_x = 0. , 635.                      # leftmost point
 goal1_y,goal2_y = 190. , 190.                   #topmost point
 circle_x, circle_y = 305.,225.
 bar1_movex, bar1_movey, bar2_movey,bar2_movex = 0. , 0. , 0. , 0.
-speed_x, speed_y, speed_circ = 250., 250., 250.
+speed_x, speed_y,speed_circ= 00., 00.,100. 
 bar1_score, bar2_score = 0,0
 #clock and font objects
 clock = pygame.time.Clock()
@@ -49,6 +68,10 @@ count=0  #variables added
 t=0
 prev=pygame.time.get_ticks()/1000.0
 ai_speed=0
+a=0
+b=0
+
+
 while True:
     #lines added
     if count!=0:
@@ -57,45 +80,7 @@ while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             exit()
-        if event.type == KEYDOWN:
-            speed_x = 250.
-            keys = pygame.key.get_pressed()
-            if keys[K_UP]:
-                bar1_movey = -ai_speed
-            if keys[K_DOWN]:
-                bar1_movey = ai_speed
-            if keys[K_LEFT]:
-                bar1_movex = -ai_speed
-            if keys[K_RIGHT]:
-                bar1_movex = ai_speed
-            
-            if keys[K_w]:
-                bar2_movey = -ai_speed
-            if keys[K_s]:
-                bar2_movey = ai_speed
-            if keys[K_a]:
-                bar2_movex = -ai_speed
-            if keys[K_d]:
-                bar2_movex = ai_speed
-
-        elif event.type == KEYUP:
-            speed_x = 0
-            if event.key == K_UP:
-                bar1_movey = 0.
-            elif event.key == K_DOWN:
-                bar1_movey = 0.
-            elif event.key == K_LEFT:
-                bar1_movex = 0.
-            elif event.key == K_RIGHT:
-                bar1_movex = 0.
-            elif event.key == K_w:
-                bar2_movey = 0.
-            elif event.key == K_s:
-                bar2_movey = 0.
-            elif event.key == K_a:
-                bar2_movex = 0.
-            elif event.key == K_d:
-                bar2_movex = 0.
+       
  
    
     score1 = font.render(str(bar1_score), True,(255,255,255))
@@ -111,9 +96,69 @@ while True:
     screen.blit(circle,(circle_x,circle_y))
     screen.blit(score1,(250.,210.))
     screen.blit(score2,(380.,210.))
-    #pygame.time.wait(5000)
-    bar1_y += bar1_movey
-    bar1_x += bar1_movex
+    #pygame.time.wait(500)
+   
+    i=0
+    while(i==0):
+        # Take each frame
+     _, frame = cap.read()
+     frame = cv2.flip(frame,1)
+
+     #cv2.imshow('frame',frame)
+     #cv2.waitKey(0)
+     hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
+     if h<20:
+        l=0
+        m=h+20
+     elif h>245:
+        m=255
+        l=h-10
+     else:
+        l=h-20
+        m=h+20
+     lower = np.array([l,100,100])   
+     upper = np.array([m,255,255])
+     mask = cv2.inRange(hsv, lower, upper)
+
+     
+     res = cv2.bitwise_and(frame,frame, mask=mask)
+     img = cv2.cvtColor(res, cv2.COLOR_RGB2GRAY)
+     img = 255-img
+     params = cv2.SimpleBlobDetector_Params()
+
+     params.filterByArea = True
+     params.minArea = 15
+       
+     detector = cv2.SimpleBlobDetector(params)
+
+     keypoints = detector.detect(img)
+
+     im_with_keypoints = cv2.drawKeypoints(img, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+
+     cv2.imshow("Keypoints", im_with_keypoints)
+     
+
+     cv2.imshow('frame',frame)
+     ans = [0,0]
+     i=10
+     #cv2.imshow('mask',mask)
+     #cv2.imshow('img',img)
+     if len(keypoints)>0:
+      print "x:"
+      a=keypoints[0].pt[0]
+      ans[0] = keypoints[0].pt[0]
+      print "y:"
+      b= keypoints[0].pt[1]
+      ans[1] = keypoints[0].pt[1]  
+      speed1_x=(ans[0]-a)/diff
+      speed1_y=(ans[1]-b)/diff
+     k = cv2.waitKey(5) & 0xFF
+     
+     if k == 27:
+        break
+  
+    bar1_y = b
+    bar1_x = a
     bar2_y += bar2_movey
     bar2_x += bar2_movex
 # movement of circle
@@ -122,7 +167,7 @@ while True:
     #3 lines added
     diff= prev-t 
     prev=t
-    print diff
+    
 
     circle_x += speed_x * time_sec
     circle_y += speed_y * time_sec
@@ -138,30 +183,37 @@ while True:
     if bar2_x >= 605. :bar2_x = 605.
     elif bar2_x <= 305. :bar2_x = 305.
     
-
+    
     if (((circle_x-bar1_x)**2 + (circle_y - bar1_y)**2)<= 900):
-       a = circle_x
-       b = circle_y
-       m1= (circle_y-bar1_y)/(circle_x-bar1_x)
-       if(((circle_x-bar1_x)**2 + (circle_y - bar1_y)**2)<900):
-        circle_x = a
-        circle_y = b
-       cosx= (1-m1**2)/(1+m1**2)
-       sinx=2*m1/(1+m1**2)
-       speed_x= (speed_circ-speed_x)*cosx + (speed_circ-speed_y)*sinx
-       speed_y= (speed_circ-speed_x)*sinx + (speed_circ-speed_y)*cosx
+       
+       if ((circle_x-bar1_x)!=0):
+        m1= (circle_y-bar1_y)/(circle_x-bar1_x)
+       
+        sinx=1-((1/(1+m1*m1)) )
+        cosx=1/(1+m1*m1)
+        cos2x= (1-m1**2)/(1+m1**2)
+        sin2x=2*m1/(1+m1**2)
+        speed_x= speed1_x*cosx + speed1_y*cosx*m1-speed_x*cos2x -speed_y*sin2x
+        speed_y= speed1_x*sin2x/2.0 + speed1_y*sinx - speed_x*sin2x +speed_y*cos2x
+
+       elif ((circle_x-bar1_x)==0) :
+        sinx=1
+        cosx=0
+        cos2x= -1
+        sin2x= 0
+        speed_x= speed1_x*cosx-speed_x*cos2x -speed_y*sin2x
+        speed_y= speed1_x*sin2x/2.0 + speed1_y*sinx - speed_x*sin2x +speed_y*cos2x
+    
+
     if (((circle_x-bar2_x)**2 + (circle_y - bar2_y)**2)<= 900):
-       a = circle_x
-       b = circle_y
+       
        m2= (circle_y-bar2_y)/(circle_x-bar2_x)
-       if(((circle_x-bar2_x)**2 + (circle_y - bar2_y)**2)<900):
-        circle_x = a
-        circle_y = b
-       cosx= (1-m2**2)/(1+m2**2)
-       sinx=2*m2/(1+m2**2)
-       speed_x= (speed_circ-speed_x)*cosx + (speed_circ-speed_y)*sinx
-       speed_y= (speed_circ-speed_x)*sinx + (speed_circ-speed_y)*cosx
-  
+       cos2x= (1-m2**2)/(1+m2**2)
+       sin2x=2*m2/(1+m2**2)
+       
+       speed_x= speed_circ*(1/(1+m1*m1)) + speed_circ*(1/(1+m1*m1))*m1-speed_x*cos2x -speed_y*sin2x
+       speed_y= speed_circ*sin2x/2.0 + speed_circ*(1-((1/(1+m1*m1)) )) - speed_x*sin2x +speed_y*cos2x
+    
 
     if circle_x <= 5.: 
      if circle_y<=290 and circle_y>=190:
@@ -184,6 +236,5 @@ while True:
     elif circle_y >= 445.:
         speed_y = -speed_y
         circle_y = 445.
-
     pygame.display.update()
-	
+cv2.destroyAllWindows()
