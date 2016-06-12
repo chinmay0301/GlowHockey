@@ -4,7 +4,24 @@ from sys import exit
 import math 
 import random
 import CircleCollisions2
+import cv2
+import numpy as np
+def rethsv(event,x,y,flags,param):
+        global h
+        if event == cv2.EVENT_LBUTTONDOWN:
+            #print hsv[y,x]
+            h=hsv[y,x,0]
 
+cv2.namedWindow('frame')
+cv2.setMouseCallback('frame', rethsv)  
+#cv2.namedWindow('mask')  
+
+
+cap = cv2.VideoCapture(0)
+h=174
+    
+a=0
+b=0
 pygame.init()
 # length= input (" Enter the length of screen:  ")   add length
 # width= input (" Enter the width of screen:  ")     add width
@@ -46,27 +63,74 @@ bar1_score, bar2_score = 0,0
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("calibri",40)
 hit = 0
+count=0  #variables added
+t=0
 prev=pygame.time.get_ticks()/1000.0
 ai_speed=0
 while True:
-    
+    #lines added
+    if count!=0:
+        t=pygame.time.get_ticks()/1000.0
+    count=count+1
+    i=0
+    while(i==0):
+        # Take each frame
+     _, frame = cap.read()
+     frame = cv2.flip(frame,1)
+
+     #cv2.imshow('frame',frame)
+     #cv2.waitKey(0)
+     hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
+     if h<20:
+        l=0
+        m=h+20
+     elif h>245:
+        m=255
+        l=h-10
+     else:
+        l=h-20
+        m=h+20
+     lower = np.array([l,100,100])   
+     upper = np.array([m,255,255])
+     mask = cv2.inRange(hsv, lower, upper)
+
+     
+     res = cv2.bitwise_and(frame,frame, mask=mask)
+     img = cv2.cvtColor(res, cv2.COLOR_RGB2GRAY)
+     img = 255-img
+     params = cv2.SimpleBlobDetector_Params()
+
+     params.filterByArea = True
+     params.minArea = 50
+       
+     detector = cv2.SimpleBlobDetector(params)
+
+     keypoints = detector.detect(img)
+
+     im_with_keypoints = cv2.drawKeypoints(img, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+
+     cv2.imshow("Keypoints", im_with_keypoints)
+     
+
+     cv2.imshow('frame',frame)
+     ans = [0,0]
+     i=10
+     #cv2.imshow('mask',mask)
+     #cv2.imshow('img',img)
+     if len(keypoints)>0:
+      print "x:"
+      a=keypoints[0].pt[0]
+      
+      b= keypoints[0].pt[1]
+      
+     k = cv2.waitKey(5) & 0xFF
+   
+  
     for event in pygame.event.get():
         if event.type == QUIT:
             exit()
         if event.type == KEYDOWN:
             keys = pygame.key.get_pressed()
-            if keys[K_UP]:
-                bar1_movey = -ai_speed
-                speed1_y=-speed1_y
-            if keys[K_DOWN]:
-                bar1_movey = ai_speed
-                speed1_y=speed1_y
-            if keys[K_LEFT]:
-                bar1_movex = -ai_speed
-                speed1_x=-speed1_x
-            if keys[K_RIGHT]:
-                bar1_movex = ai_speed
-                speed1_x=speed1_x
             
             if keys[K_w]:
                 bar2_movey = -ai_speed
@@ -82,19 +146,8 @@ while True:
                 speed2_x=speed2_x
 
         elif event.type == KEYUP:
-            if event.key == K_UP:
-                bar1_movey = 0.
-                speed1_y=0.
-            elif event.key == K_DOWN:
-                bar1_movey = 0.
-                speed1_y=0.
-            elif event.key == K_LEFT:
-                bar1_movex = 0.
-                speed1_x=0.
-            elif event.key == K_RIGHT:
-                bar1_movex = 0.
-                speed1_x=0.
-            elif event.key == K_w:
+           
+            if event.key == K_w:
                 bar2_movey = 0.
                 speed2_y=0.
             elif event.key == K_s:
@@ -106,8 +159,6 @@ while True:
             elif event.key == K_d:
                 bar2_movex = 0.
                 speed2_x=0.
- 
-   
     score1 = font.render(str(bar1_score), True,(255,255,255))
     score2 = font.render(str(bar2_score), True,(255,255,255))
 
@@ -122,14 +173,16 @@ while True:
     screen.blit(score1,(250.,210.))
     screen.blit(score2,(380.,210.))
     #pygame.time.wait(5000)
-    bar1_y += bar1_movey
-    bar1_x += bar1_movex
+    bar1_y += b
+    bar1_x += a
     bar2_y += bar2_movey
     bar2_x += bar2_movex
 # movement of circle
     time_passed = clock.tick(30)
     time_sec = time_passed / 1000.0
-    
+    #3 lines added
+            
+    #print diff
 
     circle_x += speed_x * time_sec
     circle_y += speed_y * time_sec
