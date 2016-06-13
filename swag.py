@@ -17,10 +17,11 @@ def rethsv(event,x,y,flags,param):
 
 
 cv2.namedWindow('frame')
+cv2.namedWindow('frame1')
 cv2.setMouseCallback('frame', rethsv)  
 #cv2.namedWindow('mask')  
 
-
+cap1 = cv2.VideoCapture(0)
 cap = cv2.VideoCapture(1)
 h=174
     
@@ -97,9 +98,9 @@ while True:
     screen.blit(goal1,(goal1_x,goal1_y))
     screen.blit(goal2,(goal2_x,goal2_y))
     screen.blit(circle,(circle_x,circle_y))
-    screen.blit(score1,(500.,210.))
+    screen.blit(score1,(250.,210.))
     screen.blit(score2,(380.,210.))
-    #pygame.time.wait(5000)
+    #pygame.time.wait(2500)
     bar1_y += bar1_movey
     bar1_x += bar1_movex
     bar2_y += bar2_movey
@@ -108,14 +109,14 @@ while True:
     diff= prev-t 
     prev=t
     print diff
-    if circle_x >0:
+    if circle_x <305:
 
         i=0
         while(i==0):
             # Take each frame
          _, frame = cap.read()
          frame = cv2.flip(frame,1)
-
+         
          #cv2.imshow('frame',frame)
          #cv2.waitKey(0)
          hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
@@ -129,7 +130,7 @@ while True:
             l=h-20
             m=h+20
          lower = np.array([70,100,100])   
-         upper = np.array([95,170,500])
+         upper = np.array([95,170,250])
          mask = cv2.inRange(hsv, lower, upper)
 
          
@@ -161,12 +162,12 @@ while True:
          
          if k == 27:
             break
-    if circle_x >0:
+    if circle_x >305:
         i=0
         while(i==0):
             # Take each frame
-         _, frame = cap.read()
-         frame = cv2.flip(frame,1)
+         _, frame1 = cap1.read()
+         frame1 = cv2.flip(frame1,1)
 
          #cv2.imshow('frame',frame)
          #cv2.waitKey(0)
@@ -202,7 +203,7 @@ while True:
          cv2.imshow("Keypoints", im_with_keypoints)
          
 
-         cv2.imshow('frame',frame)
+         cv2.imshow('frame1',frame1)
          i=10
          #cv2.imshow('mask',mask)
          #cv2.imshow('img',img)
@@ -341,14 +342,14 @@ while True:
         bar2_score += 1
         circle_x, circle_y = 305., 225.
         bar1_y,bar_2_y = 225., 225.
-        speed_x, speed_y, speed_circ = 500., 500., 500.
+        speed_x, speed_y, speed_circ = 250., 250., 250.
      elif not (circle_y<=260 and circle_y>=190) : speed_x = -speed_x
     elif circle_x >= 605:
       if circle_y<=290 and circle_y>=190:
         bar1_score += 1
         circle_x, circle_y = 305., 225.
         bar1_y, bar2_y = 225., 225.
-        speed_x, speed_y, speed_circ = 500., 500., 500.
+        speed_x, speed_y, speed_circ = 250., 250., 250.
       elif not (circle_y<=260 and circle_y>=190) : speed_x = -speed_x
     
     if circle_y <= 5.:
