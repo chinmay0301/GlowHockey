@@ -219,4 +219,4 @@ while True:
         circle_y = 457.5
 
     pygame.display.update()
-cv2.destroyAllWindows()
+#cv2.destroyAllWindows()
