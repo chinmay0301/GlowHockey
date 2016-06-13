@@ -5,7 +5,6 @@ import math
 import random
 import CircleCollisions2
 
-
 import cv2
 import numpy as np
 def rethsv(event,x,y,flags,param):
@@ -66,11 +65,8 @@ font = pygame.font.SysFont("calibri",40)
 hit = 0
 count=0  #variables added
 t=0
-
 a=0
 b=0
-
-
 prev=pygame.time.get_ticks()/1000.0
 ai_speed=0
 while True:
@@ -155,7 +151,6 @@ while True:
     bar2_y += bar2_movey
     bar2_x += bar2_movex
 # movement of circle
-
    
     
 
@@ -222,15 +217,12 @@ while True:
     bar2_x += bar2_movex
 # movement of circle
 
-
-
     time_passed = clock.tick(30)
     time_sec = time_passed / 1000.0
     #3 lines added
     diff= prev-t 
     prev=t
     print diff
-
 
     
 
@@ -374,3 +366,4 @@ while True:
     
     pygame.display.update()
     
+
