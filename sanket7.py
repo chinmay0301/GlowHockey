@@ -19,7 +19,7 @@ def rethsv(event,x,y,flags,param):
 
 cv2.namedWindow('frame')
 cv2.setMouseCallback('frame', rethsv)  
-cv2.namedWindow('mask')  
+cv2.namedWindow('Keypoints',cv2.WINDOW_NORMAL)  
 
 
 cap = cv2.VideoCapture(0)
@@ -146,7 +146,7 @@ while True:
 
          im_with_keypoints = cv2.drawKeypoints(img, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
-         cv2.imshow("Keypoints", im_with_keypoints)
+         cv2.imshow('Keypoints', im_with_keypoints)
          
 
          cv2.imshow('frame',frame)
@@ -203,7 +203,7 @@ while True:
 
          im_with_keypoints = cv2.drawKeypoints(img, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
-         cv2.imshow("Keypoints", im_with_keypoints)
+         cv2.imshow('Keypoints', im_with_keypoints)
          
 
          cv2.imshow('frame',frame)

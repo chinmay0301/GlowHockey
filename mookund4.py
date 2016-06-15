@@ -7,6 +7,7 @@ import CircleCollisions2
 
 import cv2
 import numpy as np
+import time
 def rethsv(event,x,y,flags,param):
         global h
         if event == cv2.EVENT_LBUTTONDOWN:
@@ -273,6 +274,7 @@ while True:
     if circle_x <= 5.: 
      if circle_y<=290 and circle_y>=190:
         bar2_score += 1
+        
         circle_x, circle_y = 305., 225.
         bar1_y,bar_2_y = 225., 225.
         speed_x, speed_y, speed_circ = 250., 250., 250.
@@ -280,6 +282,7 @@ while True:
     elif circle_x >= 605:
       if circle_y<=290 and circle_y>=190:
         bar1_score += 1
+        
         circle_x, circle_y = 305., 225.
         bar1_y, bar2_y = 225., 225.
         speed_x, speed_y, speed_circ = 250., 250., 250.
