@@ -8,11 +8,14 @@ from time import sleep
 
 import cv2
 import numpy as np
+
 def rethsv(event,x,y,flags,param):
         global h
         if event == cv2.EVENT_LBUTTONDOWN:
             print hsv[y,x]
             h=hsv[y,x,0]
+
+
 
 cv2.namedWindow('frame')
 cv2.setMouseCallback('frame', rethsv)  
@@ -50,7 +53,8 @@ circ_sur = pygame.Surface((63.75,63.75))
 circ = pygame.draw.circle(circ_sur,(255,255,255),(32,32),32)
 circle = circ_sur.convert()
 circle.set_colorkey((0,0,0))
-# some definitions
+# some definitions'
+
 RED = (255,0,0)                                   # look at this line again 
 bar1_x, bar2_x = 53.125 , 1243.125
 bar1_y, bar2_y = 332.8125000000000075 , 332.8125000000000075
@@ -66,6 +70,7 @@ font = pygame.font.SysFont("calibri",100)
 hit = 0
 count=0  #variables added
 t=0
+
 a,p=53.125 , 1243.125
 b=332.8140000000000075
 q=332.8140000000000075
@@ -73,22 +78,19 @@ prev=pygame.time.get_ticks()/1000.0
 ai_speed=0
 flag=0
 while True:
-    #lines added
-    if count!=0:
-        t=pygame.time.get_ticks()/1000.0
-    count=count+1
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            exit()
-    qw=0
-    if(flag==1):
-        while (qw<10**8):
-            qw+=1    
+#     #lines added
+#     if count!=0:
+#         t=pygame.time.get_ticks()/1000.0
+#     count=count+1
+#     for event in pygame.event.get():
+#         if event.type == QUIT:
+#             exit()
+    
     
 
-    print flag 
-    flag=0
-    print flag
+
+    
+    
     score1 = font.render(str(bar1_score), True,(255,255,255))
     score2 = font.render(str(bar2_score), True,(255,255,255))
 
@@ -335,7 +337,7 @@ while True:
     if circle_x <= 10.625: 
      if circle_y<=428.958333333333343 and circle_y>=281.041666666666673:
         bar2_score += 1
-        flag=1
+        
         circle_x, circle_y = 648.125,332.8125000000000075
         a,p=53.125 , 1243.125
         b,q= 332.8125000000000075, 332.8125000000000075
@@ -347,14 +349,15 @@ while True:
     elif circle_x >= 1285.625:
       if circle_y<=428.958333333333343 and circle_y>=281.041666666666673:
         bar1_score += 1
-        flag=1
+        
         circle_x, circle_y = 648.125,332.8125000000000075
         a,p=53.125 , 1243.125
         b, q = 332.8125000000000075, 332.8125000000000075
         speed_x, speed_y, speed_circ = 400., 400., 400.
         goald = font.render("goal!", True,(255,255,255))
         screen.blit(goald,(531.25,410.625000000000007))
-
+           
+        
         
       elif not (circle_y<=384.583333333333342 and circle_y>=281.041666666666673) : speed_x = -speed_x
     
@@ -367,5 +370,4 @@ while True:
 
     
     pygame.display.update()
-    
-
+        
