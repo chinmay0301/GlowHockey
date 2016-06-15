@@ -71,6 +71,7 @@ b=332.8140000000000075
 q=332.8140000000000075
 prev=pygame.time.get_ticks()/1000.0
 ai_speed=0
+flag=0
 while True:
     #lines added
     if count!=0:
@@ -79,13 +80,20 @@ while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             exit()
-        
-   
+    qw=0
+    if(flag==1):
+        while (qw<10**8):
+            qw+=1    
+    
+
+    print flag 
+    flag=0
+    print flag
     score1 = font.render(str(bar1_score), True,(255,255,255))
     score2 = font.render(str(bar2_score), True,(255,255,255))
 
     screen.blit(background,(0,0))
-    frame = pygame.draw.rect(screen,(255,255,255),Rect((10.625,10.625),(1338.75,699.375)),2)
+    frame = pygame.draw.rect(screen,(255,255,255),Rect((10.625,10.625),(1338.75,688.75)),2)
     middle_line = pygame.draw.aaline(screen,(255,255,255),(680,10.625),(680,699.375))
     screen.blit(bar1,(bar1_x,bar1_y))
     screen.blit(bar2,(bar2_x,bar2_y))
@@ -327,23 +335,25 @@ while True:
     if circle_x <= 10.625: 
      if circle_y<=428.958333333333343 and circle_y>=281.041666666666673:
         bar2_score += 1
+        flag=1
         circle_x, circle_y = 648.125,332.8125000000000075
         a,p=53.125 , 1243.125
         b,q= 332.8125000000000075, 332.8125000000000075
         speed_x, speed_y, speed_circ = 400., 400., 400.
-        goal1 = font.render("goal!", True,(255,255,255))
-        screen.blit(goal1,(250.,210.))
+        goald = font.render("goal!", True,(255,255,255))
+        screen.blit(goald,(807.5,410.625000000000007))
         
      elif not (circle_y<=384.583333333333342 and circle_y>=281.041666666666673) : speed_x = -speed_x
     elif circle_x >= 1285.625:
       if circle_y<=428.958333333333343 and circle_y>=281.041666666666673:
         bar1_score += 1
+        flag=1
         circle_x, circle_y = 648.125,332.8125000000000075
         a,p=53.125 , 1243.125
         b, q = 332.8125000000000075, 332.8125000000000075
         speed_x, speed_y, speed_circ = 400., 400., 400.
-        goal1 = font.render("goal!", True,(255,255,255))
-        screen.blit(goal1,(250.,210.))
+        goald = font.render("goal!", True,(255,255,255))
+        screen.blit(goald,(531.25,410.625000000000007))
 
         
       elif not (circle_y<=384.583333333333342 and circle_y>=281.041666666666673) : speed_x = -speed_x
