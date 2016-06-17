@@ -75,7 +75,7 @@ while counter>=0:
     for e in pygame.event.get():
         if e.type == pygame.USEREVENT:
             counter -= 1
-            text = str(counter).rjust(3) if counter > 0 else 'GAME ON!'
+            text = str(counter).rjust(3) if counter > 0 else 'GO!'
         if e.type == pygame.QUIT: break
     else:
         screen.blit(background,(0,0))
