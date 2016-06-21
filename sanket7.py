@@ -15,12 +15,13 @@ def rethsv(event,x,y,flags,param):
             print hsv[y,x]
             h=hsv[y,x,0]
 
-
-
 cv2.namedWindow('frame')
 cv2.setMouseCallback('frame', rethsv)  
 cv2.namedWindow('Keypoints',cv2.WINDOW_NORMAL)  
-
+ymin=130
+ymax=300
+xmin=290
+xmax=480
 
 cap = cv2.VideoCapture(0)
 h=174
@@ -61,39 +62,38 @@ bar1_y, bar2_y = 332.8125000000000075 , 332.8125000000000075
 goal1_x,goal2_x = 0. , 1349.375                      # leftmost point 
 goal1_y,goal2_y = 281.041666666666673 , 281.041666666666673             #topmost point
 circle_x, circle_y = 648.125,332.8125000000000075
-
 #clock and font objects
-
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("calibri",100)
 
 #timer_before_game 
-counter, text = 3, '3'.rjust(3)
-pygame.time.set_timer(pygame.USEREVENT, 1000)
+def timer():
+    counter, text = 3, '3'.rjust(3)
+    pygame.time.set_timer(pygame.USEREVENT, 1000)
 
-while counter>=0:
-    for e in pygame.event.get():
-        if e.type == pygame.USEREVENT:
-            counter -= 1
-            text = str(counter).rjust(3) if counter > 0 else 'GO!'
-        if e.type == pygame.QUIT: break
-    else:
-        screen.blit(background,(0,0))
-        frame = pygame.draw.rect(screen,(255,255,255),Rect((10.625,10.625),(1338.75,688.75)),2)
-        middle_line = pygame.draw.aaline(screen,(255,255,255),(680,10.625),(680,699.375))
-        screen.blit(bar1,(bar1_x,bar1_y))
-        screen.blit(bar2,(bar2_x,bar2_y))
-        screen.blit(goal1,(goal1_x,goal1_y))
-        screen.blit(goal2,(goal2_x,goal2_y))
-        screen.blit(circle,(circle_x,circle_y))
-       
-        screen.blit(font.render(text, True, (255, 255, 255)), (620, 260))
-        pygame.display.flip()
-        clock.tick(60)
-        continue
-    break
+    while counter>=0:
+        for e in pygame.event.get():
+            if e.type == pygame.USEREVENT:
+                counter -= 1
+                text = str(counter).rjust(3) if counter > 0 else 'GO!'
+            if e.type == pygame.QUIT: break
+        else:
+            screen.blit(background,(0,0))
+            frame = pygame.draw.rect(screen,(255,255,255),Rect((10.625,10.625),(1338.75,688.75)),2)
+            middle_line = pygame.draw.aaline(screen,(255,255,255),(680,10.625),(680,699.375))
+            screen.blit(bar1,(bar1_x,bar1_y))
+            screen.blit(bar2,(bar2_x,bar2_y))
+            screen.blit(goal1,(goal1_x,goal1_y))
+            screen.blit(goal2,(goal2_x,goal2_y))
+            screen.blit(circle,(circle_x,circle_y))
+           
+            screen.blit(font.render(text, True, (255, 255, 255)), (620, 260))
+            pygame.display.flip()
+            clock.tick(60)
+            continue
+        break
 
-
+timer()
 
 bar1_movex, bar1_movey, bar2_movey,bar2_movex = 0. , 0. , 0. , 0.
 speed_x, speed_y, speed1_x, speed2_x, speed1_y, speed2_y ,speed_circ= 400., 400.,400.,400.,400.,400. ,400. 
@@ -110,19 +110,15 @@ prev=pygame.time.get_ticks()/1000.0
 ai_speed=0
 flag=0
 while True:
-#     #lines added
-#     if count!=0:
-#         t=pygame.time.get_ticks()/1000.0
-#     count=count+1
-#     for event in pygame.event.get():
-#         if event.type == QUIT:
-#             exit()
-    
-    
+    #lines added
+    if count!=0:
+        t=pygame.time.get_ticks()/1000.0
+    count=count+1
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            exit()
 
 
-    
-    
     score1 = font.render(str(bar1_score), True,(255,255,255))
     score2 = font.render(str(bar2_score), True,(255,255,255))
 
@@ -179,8 +175,12 @@ while True:
          im_with_keypoints = cv2.drawKeypoints(img, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
          cv2.imshow('Keypoints', im_with_keypoints)
-         
 
+
+         cropImg = frame[ymin:ymax,xmin:xmax] # this is all there is to cropping
+
+         cv2.imshow("Cropped", cropImg)
+         
          cv2.imshow('frame',frame)
        
          i=10
@@ -236,8 +236,11 @@ while True:
          im_with_keypoints = cv2.drawKeypoints(img, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
          cv2.imshow('Keypoints', im_with_keypoints)
-         
 
+         cropImg = frame[ymin:ymax,xmin:xmax] # this is all there is to cropping
+
+         cv2.imshow("Cropped", cropImg)
+         
          cv2.imshow('frame',frame)
        
          i=10
@@ -266,10 +269,6 @@ while True:
     # diff= prev-t 
     # prev=t
     # print diff
-
-    
-
-
 
     circle_x += speed_x * time_sec
     circle_y += speed_y * time_sec
@@ -374,8 +373,8 @@ while True:
         a,p=53.125 , 1243.125
         b,q= 332.8125000000000075, 332.8125000000000075
         speed_x, speed_y, speed_circ = 400., 400., 400.
-        goald = font.render("goal!", True,(255,255,255))
-        screen.blit(goald,(807.5,410.625000000000007))
+        timer()
+        pygame.time.wait(3000)
         
      elif not (circle_y<=384.583333333333342 and circle_y>=281.041666666666673) : speed_x = -speed_x
     elif circle_x >= 1285.625:
@@ -388,7 +387,8 @@ while True:
         speed_x, speed_y, speed_circ = 400., 400., 400.
         goald = font.render("goal!", True,(255,255,255))
         screen.blit(goald,(531.25,410.625000000000007))
-           
+        timer()
+        pygame.time.wait(3000)
         
         
       elif not (circle_y<=384.583333333333342 and circle_y>=281.041666666666673) : speed_x = -speed_x
@@ -402,4 +402,3 @@ while True:
 
     
     pygame.display.update()
-        
