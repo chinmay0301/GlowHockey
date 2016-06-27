@@ -4,9 +4,11 @@ from sys import exit
 import math 
 import random
 import CircleCollisions2
+from time import sleep
 
 import cv2
 import numpy as np
+
 def rethsv(event,x,y,flags,param):
         global h
         if event == cv2.EVENT_LBUTTONDOWN:
@@ -15,8 +17,11 @@ def rethsv(event,x,y,flags,param):
 
 cv2.namedWindow('frame')
 cv2.setMouseCallback('frame', rethsv)  
-cv2.namedWindow('mask')  
-
+cv2.namedWindow('Keypoints',cv2.WINDOW_NORMAL)  
+ymin=130
+ymax=300
+xmin=290
+xmax=480
 
 cap = cv2.VideoCapture(1)
 h=174
@@ -50,27 +55,60 @@ circ = pygame.draw.circle(circ_sur,(255,255,255),(30/2,30/2),30/2)
 circle = circ_sur.convert()
 circle.set_colorkey((0,0,0))
 # some definitions
+
 RED = (255,0,0)                                   # look at this line again 
 bar1_x, bar2_x = 25. , 585.
 bar1_y, bar2_y = 225. , 225.
 goal1_x,goal2_x = 0. , 635.                      # leftmost point 
 goal1_y,goal2_y = 190. , 190.                   #topmost point
 circle_x, circle_y = 305.,225.
+
 bar1_movex, bar1_movey, bar2_movey,bar2_movex = 0. , 0. , 0. , 0.
 speed_x, speed_y, speed1_x, speed2_x, speed1_y, speed2_y ,speed_circ= 250., 250.,250.,250.,250.,250. ,250. 
 bar1_score, bar2_score = 0,0
 #clock and font objects
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("calibri",40)
+
+#timer_before_game 
+def timer():
+    counter, text = 3, '3'.rjust(3)
+    pygame.time.set_timer(pygame.USEREVENT, 1000)
+
+    while counter>=0:
+        for e in pygame.event.get():
+            if e.type == pygame.USEREVENT:
+                counter -= 1
+                text = str(counter).rjust(3) if counter > 0 else 'GO!'
+            if e.type == pygame.QUIT: break
+        else:
+            screen.blit(background,(0,0))
+            frame = pygame.draw.rect(screen,(255,255,255),Rect((10.625,10.625),(1338.75,688.75)),2)
+            middle_line = pygame.draw.aaline(screen,(255,255,255),(680,10.625),(680,699.375))
+            screen.blit(bar1,(bar1_x,bar1_y))
+            screen.blit(bar2,(bar2_x,bar2_y))
+            screen.blit(goal1,(goal1_x,goal1_y))
+            screen.blit(goal2,(goal2_x,goal2_y))
+            screen.blit(circle,(circle_x,circle_y))
+           
+            screen.blit(font.render(text, True, (255, 255, 255)), (620, 260))
+            pygame.display.flip()
+            clock.tick(60)
+            continue
+        break
+
+timer()
+
 hit = 0
 count=0  #variables added
 t=0
-a=0
+
+a,p=0,0
 b=0
-p=0
 q=0
 prev=pygame.time.get_ticks()/1000.0
 ai_speed=0
+flag=0
 while True:
     #lines added
     if count!=0:
@@ -94,7 +132,6 @@ while True:
     screen.blit(circle,(circle_x,circle_y))
     screen.blit(score1,(250.,210.))
     screen.blit(score2,(380.,210.))
-    #pygame.time.wait(5000)
     
 # movement of circle
    
@@ -139,6 +176,10 @@ while True:
 
          cv2.imshow("Keypoints", im_with_keypoints)
          
+
+         cropImg = frame[ymin:ymax,xmin:xmax] # this is all there is to cropping
+
+         cv2.imshow("Cropped", cropImg)
 
          cv2.imshow('frame',frame)
        
@@ -195,7 +236,10 @@ while True:
          im_with_keypoints = cv2.drawKeypoints(img, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
          cv2.imshow("Keypoints", im_with_keypoints)
-         
+
+         cropImg = frame[ymin:ymax,xmin:xmax] # this is all there is to cropping
+
+         cv2.imshow("Cropped", cropImg)
 
          cv2.imshow('frame',frame)
        
@@ -225,10 +269,6 @@ while True:
     # diff= prev-t 
     # prev=t
     # print diff
-
-    
-
-
 
     circle_x += speed_x * time_sec
     circle_y += speed_y * time_sec
