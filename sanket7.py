@@ -177,9 +177,9 @@ while True:
          cv2.imshow('Keypoints', im_with_keypoints)
 
 
-         cropImg = frame[ymin:ymax,xmin:xmax] # this is all there is to cropping
+         #cropImg = frame[ymin:ymax,xmin:xmax] # this is all there is to cropping
 
-         cv2.imshow("Cropped", cropImg)
+         #cv2.imshow("Cropped", cropImg)
          
          cv2.imshow('frame',frame)
        
@@ -237,9 +237,9 @@ while True:
 
          cv2.imshow('Keypoints', im_with_keypoints)
 
-         cropImg = frame[ymin:ymax,xmin:xmax] # this is all there is to cropping
+         #cropImg = frame[ymin:ymax,xmin:xmax] # this is all there is to cropping
 
-         cv2.imshow("Cropped", cropImg)
+         #cv2.imshow("Cropped", cropImg)
          
          cv2.imshow('frame',frame)
        
@@ -408,8 +408,7 @@ while True:
         a,p=53.125 , 1243.125
         b,q= 332.8125000000000075, 332.8125000000000075
         speed_x, speed_y, speed_circ = 400., 400., 400.
-        timer()
-        pygame.time.wait(3000)
+       
         
      elif not (circle_y<=384.583333333333342 and circle_y>=281.041666666666673) : speed_x = -speed_x
     elif circle_x >= 1285.625:
@@ -422,9 +421,8 @@ while True:
         speed_x, speed_y, speed_circ = 400., 400., 400.
         goald = font.render("goal!", True,(255,255,255))
         screen.blit(goald,(531.25,410.625000000000007))
-        timer()
-        pygame.time.wait(3000)
-        
+       
+               
         
       elif not (circle_y<=384.583333333333342 and circle_y>=281.041666666666673) : speed_x = -speed_x
     
