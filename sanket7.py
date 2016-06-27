@@ -56,7 +56,7 @@ circle.set_colorkey((0,0,0))
 # some definitions'
 
 RED = (255,0,0)                                   # look at this line again 
-bar1_x, bar2_x = 53.125 , 1243.125
+bar1_x, bar2_x = 53.125 , 1200.125
 bar1_y, bar2_y = 332.8125000000000075 , 332.8125000000000075
 goal1_x,goal2_x = 0. , 1349.375                      # leftmost point 
 goal1_y,goal2_y = 281.041666666666673 , 281.041666666666673             #topmost point
@@ -256,8 +256,8 @@ while True:
       
     bar1_y = b
     bar1_x = a
-    bar2_y =q
-    bar2_x =p
+    #bar2_y =q
+    #bar2_x =p
 # movement of circle
 
     time_passed = clock.tick(30)
@@ -275,6 +275,41 @@ while True:
     circle_y += speed_y * time_sec
     ai_speed = speed_circ * time_sec
 #AI of the computer.
+
+    if circle_x <=700.:
+    	hit = 0
+    if circle_x > 700.:
+    	if(hit ==0):
+    		if not (bar2_x == circle_x or bar2_y == circle_y):
+            	 if bar2_x <1150 and (circle_y<205 or circle_y>335):
+            	 	bar2_x =1150
+            	 if bar2_x < circle_x:
+                	bar2_x += ai_speed
+                 if bar2_x > circle_x:
+                	bar2_x -= ai_speed
+                 if bar2_y < circle_y+ 31.675:
+                		bar2_y += ai_speed
+                 if bar2_y > circle_y - 31.675:
+                		bar2_y -= ai_speed
+            
+
+    		#if not bar2_y == circle_y:
+            #	 if(circle_x >1100 and (circle_y<205 and circle_y>335)):
+            	 	
+    
+    #elif circle_x <1150:
+    #	bar2_x += ai_speed/2
+    #	if bar2_y < 305:
+    #		bar2_y += ai_speed/2
+    #		if bar2_y == 305:
+    #			bar2_y =305
+    #	elif bar2_y >305:
+    #		bar2_y -= ai_speed/2
+    #		if bar2_y == 305:
+    #			bar2_y = 305		            	
+
+
+
 
     if bar1_y >= 635.375: bar1_y = 635.375
     elif bar1_y <= 10.625 : bar1_y = 10.625
